@@ -53,5 +53,7 @@ System alarmowy oparty na platformie Arduino. Umożliwia monitorowanie czujnika 
 | Alarm | 3 | Naruszono czujnik |
 | Test | 4 | Czujnik naruszony (rozbrojony) |
 
+<img width="784" height="560" alt="image" src="https://github.com/user-attachments/assets/58812379-da4d-41f4-b166-144d4fbcb531" />
+
 ## Autor
 Małgorzata Librant
