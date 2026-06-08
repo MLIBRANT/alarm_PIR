@@ -1,4 +1,5 @@
 # System alarmowy na Arduino
+link https://www.tinkercad.com/things/l7IhFsT2UQV-alarm-pir-lcd/editel?returnTo=%2Fdashboard%2Fdesigns%2Fall&sharecode=8dSB0q9F0_tlfHuOLtDDrbZRNHuqTjYDB1U-RafDFek
 
 ## Opis projektu
 System alarmowy oparty na platformie Arduino. Umożliwia monitorowanie czujnika PIR (ruch) oraz czujnika temperatury TMP36 (próg 30°C). Obsługa przez menu na wyświetlaczu LCD 16x2 oraz przyciski UP/DOWN/OK.
