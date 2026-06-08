@@ -1,5 +1,6 @@
 // ================= PROSTY SYSTEM ALARMOWY =================
-// Działa z Twoim układem
+// Autor: Małgorzata Librant
+// GitHub: https://github.com/MLIBRANT/alarm_PIR
 
 // ================= PINY LCD =================
 const int RS = 7;
@@ -214,11 +215,9 @@ void resetCzujnikow() {
 // ================= STEROWANIE DIODĄ =================
 void sterujDioda() {
   if (stan == UZBROJONY) {
-    // UZBROJONY - dioda ŚWIECI ciągle
     digitalWrite(LED_ALARM, HIGH);
   }
   else if (stan == ALARM) {
-    // ALARM - dioda MIGA
     if (millis() - ostatniMig > 200) {
       ostatniMig = millis();
       miganie = !miganie;
@@ -226,7 +225,6 @@ void sterujDioda() {
     }
   }
   else {
-    // ROZBROJONY lub ODLICZANIE - dioda ZGASZONA
     digitalWrite(LED_ALARM, LOW);
   }
 }
@@ -268,7 +266,6 @@ void loop() {
     else pokazCyfre(0);
   }
   
-  // Sterowanie diodą LED
   sterujDioda();
   
   // Dźwięk alarmu
@@ -291,7 +288,6 @@ void loop() {
   // Odliczanie
   if (stan == ODLICZANIE) {
     wyswietlOdliczanie();
-    
     if (millis() - czasOdliczania > 5000) {
       stan = UZBROJONY;
       ostatniaSekunda = -1;
@@ -305,42 +301,48 @@ void loop() {
   if (przycisk != 0 && millis() - ostatniPrzycisk > 200) {
     ostatniPrzycisk = millis();
     
-    // Rozbrojenie podczas alarmu
+    // ===== ROZBROJENIE PODCZAS ALARMU =====
     if (stan == ALARM && przycisk == 3) {
       stan = ROZBROJONY;
       resetCzujnikow();
       wyswietlMenu();
     }
-    // Anulowanie odliczania
+    // ===== ANULOWANIE ODLICZANIA =====
     else if (stan == ODLICZANIE && przycisk == 3) {
       stan = ROZBROJONY;
       ostatniaSekunda = -1;
       wyswietlMenu();
     }
-    // Menu (tylko gdy rozbrojony)
+    // ===== STAN UZBROJONY - OD RAZU ROZBRAJA =====
+    else if (stan == UZBROJONY && przycisk == 3) {
+      stan = ROZBROJONY;
+      resetCzujnikow();
+      wyswietlMenu();
+    }
+    // ===== STAN ROZBROJONY - OBSŁUGA MENU =====
     else if (stan == ROZBROJONY) {
-      if (przycisk == 1) {
+      if (przycisk == 1) { // UP
         pozycjaMenu = (pozycjaMenu - 1 + 3) % 3;
         wyswietlMenu();
       }
-      else if (przycisk == 2) {
+      else if (przycisk == 2) { // DOWN
         pozycjaMenu = (pozycjaMenu + 1) % 3;
         wyswietlMenu();
       }
-      else if (przycisk == 3) {
-        if (pozycjaMenu == 0) {
+      else if (przycisk == 3) { // OK
+        if (pozycjaMenu == 0) { // Uzbroj
           resetCzujnikow();
           stan = ODLICZANIE;
           czasOdliczania = millis();
           ostatniaSekunda = -1;
           wyswietlOdliczanie();
         }
-        else if (pozycjaMenu == 1) {
+        else if (pozycjaMenu == 1) { // Rozbroj
           stan = ROZBROJONY;
           resetCzujnikow();
           wyswietlMenu();
         }
-        else if (pozycjaMenu == 2) {
+        else if (pozycjaMenu == 2) { // Czujniki
           wyswietlCzujniki();
           delay(3000);
           wyswietlMenu();
